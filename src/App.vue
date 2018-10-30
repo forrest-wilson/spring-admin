@@ -4,6 +4,7 @@
       <NavDrawer />
       <v-content>
         <v-container fluid>
+          <Snackbar />
           <router-view />
         </v-container>
       </v-content>
@@ -13,11 +14,13 @@
 
 <script>
 import NavDrawer from '@/components/NavDrawer.vue'
+import Snackbar from '@/components/Snackbar.vue'
 
 export default {
   name: 'app',
   components: {
-    NavDrawer
+    NavDrawer,
+    Snackbar
   }
 }
 </script>

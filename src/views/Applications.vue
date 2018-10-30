@@ -2,10 +2,21 @@
   <div>
     <v-expansion-panel>
       <v-expansion-panel-content v-for="(item, i) in applications" :key="i">
-        <div slot="header">{{ item.applicantDetails.name }}: {{ item.opportunityReference }}</div>
+        <div slot="header"><b>{{ item.applicantDetails.name }}</b> has applied for the {{ item.opportunityReference }} Opportunity <span v-if="!item.isRead">- UNREAD</span></div>
         <v-card>
-          <v-card-title>Feedback From: {{ item.name }}</v-card-title>
-          <v-card-text>{{ item.message }}</v-card-text>
+          <v-container>
+            <v-layout>
+              <v-flex>
+                <div><b>Applicant:</b> {{ item.applicantDetails.name }}</div>
+                <div><b>Contact Number:</b> {{ item.applicantDetails.phoneNumber }}</div>
+                <div><b>Date/Time of Application:</b> {{ moment(item.date).format('MMMM Do YYYY, h:mm:ss a') }}</div>
+                <div><b>Opportunity:</b> {{ item.opportunityReference }}</div>
+                <br>
+                <v-btn color="success" @click="markApplicationRead(i)">Mark Application as Read</v-btn>
+                <v-btn color="error" @click="deleteApplication(i)">Delete Application</v-btn>
+              </v-flex>
+            </v-layout>
+          </v-container>
         </v-card>
       </v-expansion-panel-content>
     </v-expansion-panel>
@@ -15,6 +26,9 @@
 <script>
 import axios from 'axios'
 import bcryptjs from 'bcryptjs'
+import moment from 'moment'
+
+import { EventBus } from '@/eventbus'
 
 import { mapGetters } from 'vuex'
 
@@ -41,6 +55,33 @@ export default {
         console.log(data)
         this.applications = data
       })
+    },
+    deleteApplication (index) {
+      let headers = {
+        'authorization': `Bearer ${bcryptjs.hashSync('springPOSTtoken')}`
+      }
+
+      let data = this.applications[index]
+
+      axios.delete(`${this.getApiUrl}/applications`, { data, headers }).then(res => {
+        EventBus.$emit('SHOW_SNACKBAR', res.data.message)
+        this.applications.splice(index, 1)
+      })
+    },
+    markApplicationRead (index) {
+      let headers = {
+        'authorization': `Bearer ${bcryptjs.hashSync('springPOSTtoken')}`
+      }
+
+      let data = this.applications[index]
+      data.isRead = true
+
+      axios.put(`${this.getApiUrl}/applications`, data, { headers }).then(res => {
+        EventBus.$emit('SHOW_SNACKBAR', res.data.message)
+      })
+    },
+    moment (time) {
+      return moment(time)
     }
   }
 }
