@@ -1,8 +1,10 @@
 <template>
   <div>
+    <LoadingWheel :loading="loading" />
+    <p v-if="!loading && applications.length < 1" style="text-align: center;">No applications to show</p>
     <v-expansion-panel>
       <v-expansion-panel-content v-for="(item, i) in applications" :key="i">
-        <div slot="header"><b>{{ item.applicantDetails.name }}</b> has applied for the {{ item.opportunityReference }} Opportunity <span v-if="!item.isRead">- UNREAD</span></div>
+        <div slot="header"><b>{{ item.applicantDetails.name }}</b> has applied for the {{ item.opportunityReference }} Opportunity<span v-if="!item.isRead"> - UNREAD</span></div>
         <v-card>
           <v-container>
             <v-layout>
@@ -27,16 +29,18 @@
 import axios from 'axios'
 import bcryptjs from 'bcryptjs'
 import moment from 'moment'
+import { mapGetters } from 'vuex'
 
 import { EventBus } from '@/eventbus'
 
-import { mapGetters } from 'vuex'
+import LoadingWheel from '@/components/LoadingWheel.vue'
 
 export default {
   name: 'applications',
   data () {
     return {
-      applications: []
+      applications: [],
+      loading: false
     }
   },
   mounted () {
@@ -47,6 +51,9 @@ export default {
   },
   methods: {
     getApplications () {
+      // Show the loader
+      this.loading = true
+
       let headers = {
         'authorization': `Bearer ${bcryptjs.hashSync('springtoken')}`
       }
@@ -54,6 +61,9 @@ export default {
       axios.get(`${this.getApiUrl}/applications`, { headers }).then(({ data }) => {
         console.log(data)
         this.applications = data
+
+        // Hide the loader
+        this.loading = false
       })
     },
     deleteApplication (index) {
@@ -83,6 +93,9 @@ export default {
     moment (time) {
       return moment(time)
     }
+  },
+  components: {
+    LoadingWheel
   }
 }
 </script>
