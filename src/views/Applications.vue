@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Toolbar :title="name" :refreshMethod="getApplications" />
     <LoadingWheel :loading="loading" />
     <p v-if="!loading && applications.length < 1" style="text-align: center;">No applications to show</p>
     <v-expansion-panel>
@@ -33,6 +34,7 @@ import { mapGetters } from 'vuex'
 
 import { EventBus } from '@/eventbus'
 
+import Toolbar from '@/components/Toolbar.vue'
 import LoadingWheel from '@/components/LoadingWheel.vue'
 
 export default {
@@ -40,7 +42,8 @@ export default {
   data () {
     return {
       applications: [],
-      loading: false
+      loading: false,
+      name: 'Applications'
     }
   },
   mounted () {
@@ -95,7 +98,8 @@ export default {
     }
   },
   components: {
-    LoadingWheel
+    LoadingWheel,
+    Toolbar
   }
 }
 </script>

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Toolbar :title="name" :refreshMethod="getFeedback" />
     <LoadingWheel :loading="loading" />
     <p v-if="!loading && feedback.length < 1" style="text-align: center;">No feedback to show</p>
     <v-expansion-panel>
@@ -26,6 +27,7 @@ import bcryptjs from 'bcryptjs'
 
 import { mapGetters } from 'vuex'
 
+import Toolbar from '@/components/Toolbar.vue'
 import LoadingWheel from '@/components/LoadingWheel.vue'
 
 export default {
@@ -33,7 +35,8 @@ export default {
   data () {
     return {
       feedback: [],
-      loading: false
+      loading: false,
+      name: 'Feedback'
     }
   },
   mounted () {
@@ -61,7 +64,8 @@ export default {
     }
   },
   components: {
-    LoadingWheel
+    LoadingWheel,
+    Toolbar
   }
 }
 </script>

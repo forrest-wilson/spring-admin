@@ -4,6 +4,7 @@ import Router from 'vue-router'
 import Home from '@/views/Home.vue'
 import Feedback from '@/views/Feedback.vue'
 import Applications from '@/views/Applications.vue'
+import Connections from '@/views/Connections.vue'
 
 Vue.use(Router)
 
@@ -24,6 +25,11 @@ export default new Router({
       path: '/applications',
       name: 'applications',
       component: Applications
+    },
+    {
+      path: '/connect',
+      name: 'connect',
+      component: Connections
     }
   ]
 })
