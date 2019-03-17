@@ -1,18 +1,20 @@
 <template>
   <div>
-    <Toolbar :title="name" :refreshMethod="getFeedback" />
+    <Toolbar :title="name" :refreshMethod="getLearning" />
     <LoadingWheel :loading="loading" />
-    <p v-if="!loading && feedback.length < 1" style="text-align: center;">No feedback to show</p>
+    <p v-if="!loading && learning.length < 1" style="text-align: center;">No learning completions to show</p>
     <v-expansion-panel>
-      <v-expansion-panel-content v-for="(item, i) in feedback" :key="i">
-        <div slot="header">{{ item.title }}</div>
+      <v-expansion-panel-content v-for="(item, i) in learning" :key="i">
+        <div slot="header">{{ item.name }} - {{ item.learning_id }}</div>
         <v-card>
           <v-container>
             <v-layout>
               <v-flex>
-                <div><b>Feedback From: </b>{{ item.name }}</div>
-                <div><b>Category: </b>{{ item.category }}</div>
-                <div><b>Message: </b>{{ item.message }}</div>
+                <div><b>Spring ID: </b>{{ item.spring_id }}</div>
+                <div><b>Name: </b>{{ item.name }}</div>
+                <div><b>Date: </b>{{ item.date }}</div>
+                <div><b>Learning ID: </b>{{ item.learning_id }}</div>
+                <div><b>Score: </b>{{ item.score }}</div>
               </v-flex>
             </v-layout>
           </v-container>
@@ -32,22 +34,22 @@ import Toolbar from '@/components/Toolbar.vue'
 import LoadingWheel from '@/components/LoadingWheel.vue'
 
 export default {
-  name: 'feedback',
+  name: 'learning',
   data () {
     return {
-      feedback: [],
+      learning: [],
       loading: false,
-      name: 'Feedback'
+      name: 'Learning'
     }
   },
   mounted () {
-    this.getFeedback()
+    this.getLearning()
   },
   computed: {
     ...mapGetters(['getApiUrl'])
   },
   methods: {
-    getFeedback () {
+    getLearning () {
       // Show the loader
       this.loading = true
 
@@ -55,9 +57,9 @@ export default {
         'authorization': `bearer ${bcryptjs.hashSync('springtoken')}`
       }
 
-      axios.get(`${this.getApiUrl}/feedback`, { headers }).then(({ data }) => {
+      axios.get(`${this.getApiUrl}/learning`, { headers }).then(({ data }) => {
         console.log(data)
-        this.feedback = data
+        this.learning = data
 
         // Hide the loader
         this.loading = false

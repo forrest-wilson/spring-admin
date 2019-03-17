@@ -1,17 +1,20 @@
 <template>
   <div>
-    <Toolbar :title="name" :refreshMethod="getFeedback" />
+    <Toolbar :title="name" :refreshMethod="getContact" />
     <LoadingWheel :loading="loading" />
-    <p v-if="!loading && feedback.length < 1" style="text-align: center;">No feedback to show</p>
+    <p v-if="!loading && contact.length < 1" style="text-align: center;">No contacts to show</p>
     <v-expansion-panel>
-      <v-expansion-panel-content v-for="(item, i) in feedback" :key="i">
-        <div slot="header">{{ item.title }}</div>
+      <v-expansion-panel-content v-for="(item, i) in contact" :key="i">
+        <div slot="header">{{ item.contactname }} - {{ item.date }}</div>
         <v-card>
           <v-container>
             <v-layout>
               <v-flex>
-                <div><b>Feedback From: </b>{{ item.name }}</div>
-                <div><b>Category: </b>{{ item.category }}</div>
+                <div><b>Contact ID: </b>{{ item.spring_id }}</div>
+                <div><b>Contact From: </b>{{ item.contactname }}</div>
+                <div><b>Date: </b>{{ item.date }}</div>
+                <div><b>Email: </b>{{ item.email }}</div>
+                <div><b>Phone: </b>{{ item.phone }}</div>
                 <div><b>Message: </b>{{ item.message }}</div>
               </v-flex>
             </v-layout>
@@ -32,22 +35,22 @@ import Toolbar from '@/components/Toolbar.vue'
 import LoadingWheel from '@/components/LoadingWheel.vue'
 
 export default {
-  name: 'feedback',
+  name: 'contact',
   data () {
     return {
-      feedback: [],
+      contact: [],
       loading: false,
-      name: 'Feedback'
+      name: 'Contact'
     }
   },
   mounted () {
-    this.getFeedback()
+    this.getContact()
   },
   computed: {
     ...mapGetters(['getApiUrl'])
   },
   methods: {
-    getFeedback () {
+    getContact () {
       // Show the loader
       this.loading = true
 
@@ -55,9 +58,9 @@ export default {
         'authorization': `bearer ${bcryptjs.hashSync('springtoken')}`
       }
 
-      axios.get(`${this.getApiUrl}/feedback`, { headers }).then(({ data }) => {
+      axios.get(`${this.getApiUrl}/contact`, { headers }).then(({ data }) => {
         console.log(data)
-        this.feedback = data
+        this.contact = data
 
         // Hide the loader
         this.loading = false

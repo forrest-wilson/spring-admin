@@ -1,18 +1,20 @@
 <template>
   <div>
-    <Toolbar :title="name" :refreshMethod="getFeedback" />
+    <Toolbar :title="name" :refreshMethod="getDream" />
     <LoadingWheel :loading="loading" />
-    <p v-if="!loading && feedback.length < 1" style="text-align: center;">No feedback to show</p>
+    <p v-if="!loading && dream.length < 1" style="text-align: center;">No dreams to show</p>
     <v-expansion-panel>
-      <v-expansion-panel-content v-for="(item, i) in feedback" :key="i">
-        <div slot="header">{{ item.title }}</div>
+      <v-expansion-panel-content v-for="(item, i) in dream" :key="i">
+        <div slot="header">{{ item.name }} - {{ item.date }}</div>
         <v-card>
           <v-container>
             <v-layout>
               <v-flex>
-                <div><b>Feedback From: </b>{{ item.name }}</div>
-                <div><b>Category: </b>{{ item.category }}</div>
-                <div><b>Message: </b>{{ item.message }}</div>
+                <div><b>Spring ID: </b>{{ item.spring_id }}</div>
+                <div><b>Name: </b>{{ item.name }}</div>
+                <div><b>Date: </b>{{ item.date }}</div>
+                <div><b>Selected Dreams: </b>{{ item.selectedDreams }}</div>
+                <div><b>Questionnaire Responses: </b>{{ item.questionnaireResponses }}</div>
               </v-flex>
             </v-layout>
           </v-container>
@@ -32,22 +34,22 @@ import Toolbar from '@/components/Toolbar.vue'
 import LoadingWheel from '@/components/LoadingWheel.vue'
 
 export default {
-  name: 'feedback',
+  name: 'dream',
   data () {
     return {
-      feedback: [],
+      dream: [],
       loading: false,
-      name: 'Feedback'
+      name: 'Dream'
     }
   },
   mounted () {
-    this.getFeedback()
+    this.getDream()
   },
   computed: {
     ...mapGetters(['getApiUrl'])
   },
   methods: {
-    getFeedback () {
+    getDream () {
       // Show the loader
       this.loading = true
 
@@ -55,9 +57,9 @@ export default {
         'authorization': `bearer ${bcryptjs.hashSync('springtoken')}`
       }
 
-      axios.get(`${this.getApiUrl}/feedback`, { headers }).then(({ data }) => {
+      axios.get(`${this.getApiUrl}/dream`, { headers }).then(({ data }) => {
         console.log(data)
-        this.feedback = data
+        this.dream = data
 
         // Hide the loader
         this.loading = false

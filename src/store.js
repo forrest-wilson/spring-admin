@@ -3,7 +3,8 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-let url = 'http://springapi.wlg.cloudapp.goapollo.nz'
+// let url = 'http://13.211.11.32:5656'
+let url = 'https://www.springapi.tk'
 // let url = 'http://localhost:5656'
 
 export default new Vuex.Store({

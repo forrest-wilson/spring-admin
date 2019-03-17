@@ -1,18 +1,18 @@
 <template>
   <div>
-    <Toolbar :title="name" :refreshMethod="getFeedback" />
+    <Toolbar :title="name" :refreshMethod="getPromoCode" />
     <LoadingWheel :loading="loading" />
-    <p v-if="!loading && feedback.length < 1" style="text-align: center;">No feedback to show</p>
+    <p v-if="!loading && promocode.length < 1" style="text-align: center;">No promo code redemptions to show</p>
     <v-expansion-panel>
-      <v-expansion-panel-content v-for="(item, i) in feedback" :key="i">
-        <div slot="header">{{ item.title }}</div>
+      <v-expansion-panel-content v-for="(item, i) in promocode" :key="i">
+        <div slot="header">{{ item.promocode }}</div>
         <v-card>
           <v-container>
             <v-layout>
               <v-flex>
-                <div><b>Feedback From: </b>{{ item.name }}</div>
-                <div><b>Category: </b>{{ item.category }}</div>
-                <div><b>Message: </b>{{ item.message }}</div>
+                <div><b>Request From: </b>{{ item.name }}</div>
+                <div><b>Financial Mentor: </b>{{ item.mentor_name }}</div>
+                <div><b>Promo Code: </b>{{ item.promocode }}</div>
               </v-flex>
             </v-layout>
           </v-container>
@@ -32,22 +32,22 @@ import Toolbar from '@/components/Toolbar.vue'
 import LoadingWheel from '@/components/LoadingWheel.vue'
 
 export default {
-  name: 'feedback',
+  name: 'promoCode',
   data () {
     return {
-      feedback: [],
+      promocode: [],
       loading: false,
-      name: 'Feedback'
+      name: 'PromoCode'
     }
   },
   mounted () {
-    this.getFeedback()
+    this.getPromoCode()
   },
   computed: {
     ...mapGetters(['getApiUrl'])
   },
   methods: {
-    getFeedback () {
+    getPromoCode () {
       // Show the loader
       this.loading = true
 
@@ -55,9 +55,9 @@ export default {
         'authorization': `bearer ${bcryptjs.hashSync('springtoken')}`
       }
 
-      axios.get(`${this.getApiUrl}/feedback`, { headers }).then(({ data }) => {
+      axios.get(`${this.getApiUrl}/promoCode`, { headers }).then(({ data }) => {
         console.log(data)
-        this.feedback = data
+        this.promocode = data
 
         // Hide the loader
         this.loading = false

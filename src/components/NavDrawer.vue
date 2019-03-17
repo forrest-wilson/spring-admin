@@ -34,7 +34,13 @@ export default {
         { title: 'Applications', icon: 'work', route: '/applications' },
         { title: 'Connect', icon: 'chat', route: '/connect' },
         { title: 'Trade', icon: 'attach_money', route: '/trade' },
-        { title: 'Feedback', icon: 'feedback', route: '/feedback' }
+        { title: 'Feedback', icon: 'feedback', route: '/feedback' },
+        { title: 'Promo Code', icon: 'feedback', route: '/promoCode' },
+        { title: 'Dream', icon: 'feedback', route: '/dream' },
+        { title: 'Contact', icon: 'feedback', route: '/contact' },
+        { title: 'Event', icon: 'feedback', route: '/event' },
+        { title: 'Learning', icon: 'feedback', route: '/learning' },
+        { title: 'Redeem', icon: 'feedback', route: '/redeem' }
       ]
     }
   },
